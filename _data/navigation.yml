@@ -17,4 +17,16 @@ main:
     url: /bookchapters/
 
   - title: "Talks"
-    url: /talks/    
+    url: /talks/   
+
+  - title: "Personal"
+    url: /personal/
+
+  - title: "Photography"
+    url: /photography/
+
+  - title: "Blog"
+    url: /blog/
+    
+
+  

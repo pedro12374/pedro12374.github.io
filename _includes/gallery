@@ -6,44 +6,66 @@
   {% assign gallery = page.gallery %}
 {% endif %}
 
-{% if gallery.size == 2 %}
-  {% assign gallery_layout = 'half' %}
-{% elsif gallery.size >= 3 %}
-  {% assign gallery_layout = 'third' %}
-{% else %}
-  {% assign gallery_layout = '' %}
-{% endif %}
+<style>
+  /* Masonry Layout Logic */
+  .gallery-masonry {
+    column-count: 1;
+    column-gap: 1.5em;
+  }
+  
+  /* Tablet (2 columns) */
+  @media (min-width: 600px) {
+    .gallery-masonry {
+      column-count: 2;
+    }
+  }
 
-<figure class="{{ gallery_layout }} {{ include.class }}">
+  /* Desktop (3 columns) */
+  @media (min-width: 1000px) {
+    .gallery-masonry {
+      column-count: 3;
+    }
+  }
+
+  /* Prevent items from splitting across columns */
+  .gallery-item {
+    break-inside: avoid;
+    margin-bottom: 1.5em;
+  }
+
+  /* Image styling */
+  .gallery-item img {
+    width: 100%;
+    height: auto; /* Preserves aspect ratio - NO CROPPING */
+    display: block;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  /* Hover effect */
+  .gallery-item:hover img {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+  }
+</style>
+
+<div class="gallery-masonry">
   {% for img in gallery %}
-    {% if img.url %}
-      <a href=
-        {% if img.url contains "://" %}
-          "{{ img.url }}"
-        {% else %}
-          "{{ img.url | prepend: "/images/" | prepend: base_path }}"
-        {% endif %}
-        {% if img.title %}title="{{ img.title }}"{% endif %}
-      >
-        <img src=
-          {% if img.image_path contains "://" %}
-            "{{ img.image_path }}"
-          {% else %}
-            "{{ img.image_path | prepend: "/images/" | prepend: base_path }}"
-          {% endif %}
-          alt="{% if img.alt %}{{ img.alt }}{% endif %}">
+    <div class="gallery-item">
+      <a href="{% if img.url contains '://' %}{{ img.url }}{% else %}{{ img.url | prepend: '/images/' | prepend: base_path }}{% endif %}" 
+         class="image-popup" 
+         title="{{ img.alt }}">
+        
+        <img src="{% if img.image_path contains '://' %}{{ img.image_path }}{% else %}{{ img.image_path | prepend: '/images/' | prepend: base_path }}{% endif %}" 
+             alt="{{ img.alt }}">
       </a>
-    {% else %}
-      <img src=
-        {% if img.image_path contains "://" %}
-          "{{ img.image_path }}"
-        {% else %}
-          "{{ img.image_path | prepend: "/images/" | prepend: base_path }}"
-        {% endif %}
-        alt="{% if img.alt %}{{ img.alt }}{% endif %}">
-    {% endif %}
+    </div>
   {% endfor %}
-  {% if include.caption %}
-    <figcaption>{{ include.caption | markdownify | remove: "<p>" | remove: "</p>" }}</figcaption>
-  {% endif %}
-</figure>
+</div>
+
+{% if include.caption %}
+  <figcaption style="text-align: center; font-style: italic; color: #666; margin-top: 20px;">
+    {{ include.caption | markdownify | remove: "<p>" | remove: "</p>" }}
+  </figcaption>
+{% endif %}

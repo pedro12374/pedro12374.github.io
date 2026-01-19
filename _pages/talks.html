@@ -16,7 +16,10 @@ author_profile: true
 
   <div class="archive__item">
     <article class="archive__item" itemscope="" itemtype="http://schema.org/Event">
-      <h3 class="archive__item-title" itemprop="name">{{ talk.venue }}</h3>
+      <h3 class="archive__item-title" itemprop="name" style="cursor: text; pointer-events: none; text-decoration: none; color: inherit;">
+        {{ talk.venue }}
+      </h3>
+      
       <p class="page__meta">
         <i class="fa fa-map-marker" aria-hidden="true"></i> {{ talk.location }} &bull; <time datetime="{{ talk.date | default: "1900-01-01" | date_to_xmlschema }}">{{ talk.date | default: "1900-01-01" | date: "%B %d, %Y" }}</time>
       </p>

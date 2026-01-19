@@ -30,11 +30,22 @@ author_profile: true
 {% for post in site.submitted reversed %}
   <div class="archive__item">
     <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
-      <h3 class="archive__item-title" itemprop="headline">
+      <h3 class="archive__item-title" itemprop="headline" style="pointer-events: none; cursor: text; text-decoration: none; color: inherit;">
         {{ post.title }} 
       </h3>
+      
       {% if post.citation %}
-        <p class="archive__item-citation" itemprop="citation">{{ post.citation | markdownify | remove: '<p>' | remove: '</p>' }}</p>
+        <p class="archive__item-citation" itemprop="citation" style="margin-bottom: 5px;">
+          {{ post.citation | markdownify | remove: '<p>' | remove: '</p>' }}
+        </p>
+      {% endif %}
+
+      {% if post.arxiv %}
+        <p class="archive__item-citation" style="margin-top: 0; font-size: 0.9em;">
+          <a href="{{ post.arxiv }}" style="color: #d9230f; text-decoration: none;">
+            <i class="ai ai-arxiv ai-fw"></i> Download from arXiv
+          </a>
+        </p>
       {% endif %}
     </article>
   </div>
@@ -55,7 +66,7 @@ author_profile: true
   <div class="archive__item">
     <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
       <h3 class="archive__item-title" itemprop="headline">
-        <a href="{{ post.url | relative_url }}" rel="permalink">{{ post.title }}</a>
+        <a href="{{ post.paperurl | default: post.url }}" rel="permalink">{{ post.title }}</a>
       </h3>
       {% if post.citation %}
         <p class="archive__item-citation" itemprop="citation">{{ post.citation | markdownify | remove: '<p>' | remove: '</p>' }}</p>
